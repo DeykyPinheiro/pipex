@@ -1,301 +1,28 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
+#include "pipex.h"
 
-// #include <sys/stat.h>
-// #include <sys/types.h>
-// #include <sys/errno.h>
+void	swap_input_for_channel1(t_chanel channels)
+{
+		dup2(channels.chanel2[0], STDIN_FILENO);
+		dup2(channels.chanel1[1], STDOUT_FILENO);
+}
 
-// dup duplicar o fd e usa o fd mais baixo sem uso
-// dup2 dubpla o fd e usa o fd especificado
+void	swap_input_for_channel2(t_chanel channels)
+{
+		dup2(channels.chanel1[0], STDIN_FILENO);
+		dup2(channels.chanel2[1], STDOUT_FILENO);
+}
 
-// meu contador até 10
-// int main()
-// {
-// 	int	id;
-// 	int	num;
+void	swap_input_for_master1(t_chanel channels)
+{
+		dup2(channels.chanel1[0], STDIN_FILENO);
+		dup2(channels.master[1], STDOUT_FILENO);
+}
 
-// 	id = fork();
-// 	if(id != 0)
-// 	{
-// 		num = 1;
-// 	}
-// 	else
-// 	{
-// 		num = 6;
-// 		// wait();
-// 	}
-// 	for (int i = num; i < num + 5; i++)
-// 	{
-// 	printf("%i\n", i);
-// 	}
-// 	// if (id != 0)
-// 	// printf("=====\n");
-// }
-
-// diferencia o que é pai e o que é filho
-// int	main(int argc, char *argv[])
-// {
-// 	int id;
-
-// 	id = fork();
-// 	if (id == 0)
-// 	{
-// 		printf("hello world from child process id: %i\n", id);
-// 	}
-// 	else
-// 	{
-// 		printf("hello world from main process maid: %i\n", id);
-// 	}
-// 	return (0);
-// }
-
-// mostra que imprime 2^n sendo n o numero de forks
-// int	main(int argc, char *argv[])
-// {
-// 	fork();
-// 	fork();
-// 	fork();
-// 	fork();
-// 	printf("this is a teste\n");
-// }
-
-// // imprime tres
-// int	main(int argc, char *argv[])
-// {
-// 	int id;
-// 	id = fork();
-// 	if (id != 0)
-// 	{
-// 		printf("processo filho em baixo\n");
-// 		fork();
-// 	}
-// 	printf("hello world\n");
-// }
-
-// mostra como imprimir de 1 a 10 com fork
-// int	main(int argc, char *argv[])
-// {
-// 	int id;
-
-// 	id = fork();
-// 	int n;
-// 	if (id == 0)
-// 	{
-// 		n = 1;
-// 	}
-// 	else
-// 	{
-// 		n = 6;
-// 	}
-// 	if (id != 0)
-// 		wait();
-// 	for (int i = n; i < n + 5; i++)
-// 	{
-// 		printf("%i\n", i);
-// 		fflush(stdout);
-// 	}
-// 	if (id == 0)
-// 	{
-// 		printf("=====================\n");
-// 	}
-// 	return (0);
-// }
-
-// // imprimindo processo id
-// int	main(int argc, char *argv[])
-// {
-// 	int	id;
-// 	int	res;
-// 	id = fork();
-// 	if (id == 0)
-// 	{
-// 		sleep(1);
-// 	}
-// 	printf("Current id: %d, Parent id: %d\n", getpid(), getppid());
-// 	res = wait(NULL);
-// 	if ( res == -1)
-// 	{
-// 		printf("no children to wait for\n");
-// 	}
-// 	else
-// 	{
-// 		printf("%d finished execution\n", res);
-// 	}
-// 	return (0);
-// }
-
-// // calling fork multiple time [não terminado, voltar quando precisar]
-// int	main(int argc, char *argv[])
-// {
-// 	int id1;
-// 	int id2;
-
-// 	id1 = fork();
-// 	id2 = fork();
-// 	return (0);
-// }
-
-
-// // communication between processes
-// int	main(int argc, char *argv[])
-// {
-// 	int fd[2];
-// 	int id;
-
-// 	if(pipe(fd) == -1)
-// 	{
-// 		printf("a error ocorred with opening the pipe\n");
-// 		return (1);
-// 	}
-// 	id = fork();
-// 	if (id == 0)
-// 	{
-// 		close(fd[0]);
-// 		int x;
-// 		printf("input a number: \n");
-// 		scanf("%d", &x);
-// 		if (write(fd[1], &x, sizeof(int)) == -1)
-// 		{
-// 			printf("an error ocorred with writing to the pipe");
-// 			return (2);
-// 		}
-// 		close(fd[1]);
-// 	}
-// 	else
-// 	{
-// 		int y;
-// 		if (read(fd[0], &y, sizeof(int)) == -1)
-// 		{
-// 			printf("an error ocorred with reading to the pipe");
-// 			return (2);
-// 		}
-// 		close(fd[0]);
-// 		printf("got child processes %d\n", y);
-// 	}
-
-// 	return (0);
-// }
-
-
-// int	main(int argc, char *argv[])
-// {
-// 	if (mkfifo("myfifo1", 0777) == -1)
-// 	{
-// 		if (errno != EEXIST)
-// 		{
-// 			printf("could not create file\n");
-// 			return (1);
-// 		}
-// 	}
-// 	printf("opening\n");
-// 	int fd = open("myfifo1", O_WRONLY);
-// 	printf("opened\n");
-// 	int x = 'Z';
-// 	if (write(fd, &x, sizeof(x)) == -1)
-// 	{
-// 		return (2);
-// 	}
-// 	printf("written\n");
-// 	close(fd);
-// 	printf("Closed fd\n");
-// 	return (0);
-// }
-
-// two way communication betwen process (using pipes)
-// int	main(int argc, char *argv[])
-// {
-// 	// 5 => 4 * 5 = 20 => 20
-// 	int p1[2];
-// 	if (pipe(p1) == -1)
-// 	{
-// 		return (1);
-// 	}
-// 	int pid = fork();
-// 	if (pid == -1)
-// 	{
-// 		return (2);
-// 	}
-// 	if (pid == 0)
-// 	{
-// 		printf("child process\n");
-// 		int x;
-// 		if (read(p1[0], &x, sizeof(x)) == -1)
-// 		{
-// 			return (3);
-// 		}
-// 		printf("recevid %d\n", x);
-// 		x *= 4;
-// 		if (write(p1[1], &x, sizeof(x)) == -1)
-// 		{
-// 			return (4);
-// 		}
-// 		printf("wrote %d\n", x);
-// 	}
-// 	else
-// 	{
-
-// 	}
-
-// 	return (0);
-// }
-
-
-// int	main(int argc, char *argv[])
-// {
-// 	printf("argc: %i\n", argc);
-// 	for ( int i = 0; i < argc; i++)
-// 	{
-// 		printf("argv[%i] => %s\n", i, argv[i]);
-// 	}
-// 	printf("====================================\n");
-// 	int fd[2];
-
-// 	if( pipe(fd) == -1)
-// 	{
-// 		return (1);
-// 	}
-
-// 	int pid1 = fork();
-// 	if (pid1 < 0)
-// 	{
-// 		return (2);
-// 	}
-
-// 	// process child
-// 	if (pid1 == 0)
-// 	{
-// 		dup2(fd[1], STDOUT_FILENO);
-// 		close(fd[0]);
-// 		close(fd[1]);
-// 		execlp("ping", "ping", "-c", "5", "google.com", NULL);
-// 	}
-
-// 	int pid2;
-// 	pid2 = fork();
-// 	if (pid2 < 0)
-// 	{
-// 		return (3);
-// 	}
-
-// 	// second child, grep
-// 	if (pid2 == 0)
-// 	{
-// 		dup2(argv[2], STDIN_FILENO);
-// 		close(fd[0]);
-// 		close(fd[1]);
-// 		execlp("grep", "grep", "rtt", NULL);
-// 	}
-
-// 	close(fd[0]);
-// 	close(fd[1]);
-// 	waitpid(pid1, NULL, 0);
-// 	waitpid(pid2, NULL, 0);
-// 	return (0);
-// }
-
+void	swap_input_for_master2(t_chanel channels)
+{
+		dup2(channels.chanel2[0], STDIN_FILENO);
+		dup2(channels.master[1], STDOUT_FILENO);
+}
 int	main(int argc, char *argv[])
 {
 	// apagar essa parter
@@ -307,43 +34,143 @@ int	main(int argc, char *argv[])
 	printf("====================================\n");
 	// até aqui
 
-	int	fd[2];
-	int	pid1;
-	int	pid2;
-	int file1;
-	int file2;
+	// char **test;
+	// char *a = "tr a c";
+	// test = ft_split(a, ' ');
+	// for (int i = 0; test[i]; i++)
+	// 	printf("%s\n", test[i]);
 
-	pipe(fd); // verificar depois
-	pid1 = fork();
-	if (pid1 == 0)
+	t_chanel chanels;
+	int	pid;
+	int infile;
+	int outfile;
+	int i;
+
+	infile = open(argv[1], O_RDONLY);
+	outfile = open(argv[argc - 1], O_RDONLY | O_WRONLY);
+
+	pipe(chanels.chanel1);
+	pid = fork();
+	if (pid == 0)
 	{
-		// 1 = tela;
-		// antes escrevia na tela, agora no file1
-	file1 = open(argv[1], O_RDONLY); // realizar validacao depois
-		dup2(file1, STDIN_FILENO); // fd[0] tbm pode
-		// antes escrevia na tela, agora escreve no fd[1]
-		dup2(fd[1], STDOUT_FILENO); // mudando a saida para
-		// 1 = fd[1];
-		close(fd[0]);
-		close(fd[1]);
-		execlp("ls", "ls", NULL);
+		// comand(infile, fd, cat)
+		printf("filho 1\n");
+		printf("comando: %s\n", argv[2]);
+		dup2(infile, STDIN_FILENO);
+		dup2(chanels.chanel1[1], STDOUT_FILENO);
+		close(chanels.chanel1[0]);
+		close(chanels.chanel1[1]);
+		execlp("cat", "cat", NULL);
 	}
-	pid2 = fork();
-	if (pid2 == 0)
+	waitpid(pid, NULL, 0);
+
+
+	i = 3; // ja entra no 3
+	printf("====================================\n");
+	printf("inicio do loop: do comando %i até %d\n", i, argc - 3);
+	while (i <= argc - 3)
 	{
-		// leio do ultimo processo
-	file2 = open(argv[3], O_RDONLY | O_WRONLY);
-		dup2(fd[0], STDIN_FILENO);
-		dup2(file2, STDOUT_FILENO);
-		close(fd[0]);
-		close(fd[1]);
-		execlp("grep", "grep", "a.out", NULL);
+		printf("filho %d\n", i);
+		printf("comando: %s\n", argv[i]);
+		if ((i % 2 == 1 && i == argc - 3 )|| (i % 2 == 0 && i == argc - 3))
+		{
+			pipe(chanels.master);
+		}
+		else if (i % 2 != 0)
+		{
+			printf("pipe chanel 2\n");
+			pipe(chanels.chanel2);
+		}
+		else if (i % 2 == 0)
+		{
+			printf("pipe chanel 1\n");
+			pipe(chanels.chanel1);
+		}
+
+		pid = fork();
+		if (pid == 0)
+		{
+			if (i % 2 == 1 && i == argc - 3)
+			{
+				printf("ultima execucao par i: %d\n", i);
+				swap_input_for_master1(chanels);
+				close(chanels.chanel1[0]);
+				close(chanels.chanel1[1]);
+				comands(argv[i]);
+			}
+			else if (i % 2 == 0 && i == argc - 3)
+			{
+				// printf("i: %d\n", i);
+				printf("ultima execucao impar i: %d\n", i);
+				swap_input_for_master2(chanels);
+				close(chanels.chanel2[0]);
+				close(chanels.chanel2[1]);
+				comands(argv[i]);
+			}
+			else if (i % 2 == 0 && i != argc - 3)
+			{
+				swap_input_for_channel1(chanels);
+				close(chanels.chanel2[0]);
+				close(chanels.chanel2[1]);
+				close(chanels.chanel1[0]);
+				close(chanels.chanel1[1]);
+				comands(argv[i]);
+			}
+			else if (i % 2 == 1 && i != argc - 3)
+			{
+				swap_input_for_channel2(chanels);
+				close(chanels.chanel1[0]);
+				close(chanels.chanel1[1]);
+				close(chanels.chanel2[0]);
+				close(chanels.chanel2[1]);
+				comands(argv[i]);
+			}
+		}
+		if (i % 2 == 1)
+		{
+			printf("fechei canal 1 i é impar\n");
+			close(chanels.chanel1[0]);
+			close(chanels.chanel1[1]);
+		}
+		else if (i % 2 == 0)
+		{
+			printf("fechei canal 2 i é par\n");
+			close(chanels.chanel2[0]);
+			close(chanels.chanel2[1]);
+		}
+		waitpid(pid, NULL, 0);
+		printf("final do filho %d\n\n", i);
+		i++;
 	}
-	close(fd[0]);
-	close(fd[1]);
-	close(file1);
-	close(file2);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	printf("final do loop %d\n",i);
+	printf("====================================\n");
+
+	pid = fork();
+	if (pid == 0)
+	{
+		printf("filho %d\n", i);
+		dup2(chanels.master[0], STDIN_FILENO);
+		dup2(outfile, STDOUT_FILENO);
+		close(chanels.master[0]);
+		close(chanels.master[1]);
+		execlp("grep", "grep", "line a", NULL);
+	}
+	close(chanels.master[0]);
+	close(chanels.master[1]);
+	close(infile);
+	close(outfile);
+	waitpid(pid, NULL, 0);
+	printf("final\n");
 	return (0);
 }
+
+
+
+
+
+
+// if (argc > 3 && argc <4)
+// {
+// }
+
+
