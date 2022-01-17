@@ -35,14 +35,18 @@ OBJ	= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+
+$(OBJ_DIR):
+		mkdir -p ./obj
+
+$(NAME): $(OBJ_DIR) $(OBJ)
 	$(AR) $(ARFLAGS) $(NAME) $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	gcc -c $< -o $@
 
 clean:
-	$(RM) $(OBJ_DIR)/*
+	$(RM) $(OBJ_DIR)
 
 fclean: clean
 	$(RM) $(NAME)

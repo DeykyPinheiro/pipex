@@ -1,4 +1,4 @@
-// #include "pipex.h"
+#include "pipex.h"
 
 
 // /*
@@ -81,24 +81,68 @@
 // }
 
 // #include "pipex.h"
-#include "../libraries/libft/src/libft.h"
-#include <stdio.h>
 
 int	main(int argc, char* argv[], char* envp[]) // envp var padrao de ambiente
 {
-	int i = 0;
-	while(i < argc)
+	(void)argc;
+	(void)argv;
+	(void)envp;
+
+	// programa comeca aqui
+	t_pipex	pipex;
+
+	ft_bzero(&pipex, sizeof(t_pipex));
+	set_default_pipe(&pipex, argc, argv, envp);
+
+	//TESTES
+
+	// mostra todos os comandos dento do argv
+	// int i = 0;
+	// while(i < pipex.argc)
+	// {
+	// 	printf("argv[%i] %s\n" , i, pipex.argv[i]);
+	// 	i++;
+	// }
+	// printf("========================================\n");
+
+	// mostra todos os caminhos
+	// int j = 0;
+	// while(pipex.envp[j])
+	// {
+	// 	printf("envp[%i] %s\n" , j, pipex.envp[j]);
+	// 	j++;
+	// }
+
+	// printf("o tamanho final é : %d\n", pipex.argc);
+	if (argc == 5)
 	{
-		printf("argv[%i] %s\n" , i, argv[i]);
-		i++;
+		printf("caminho de execucao dos comandos\n");
+		set_comands(&pipex);
+
+
+		// //mostrando comos os comandos ficaram dentro do cmd
+		// j = 1;
+		// while (pipex.cmd[j])
+		// {
+		// 	printf("path: %s\n", *pipex.cmd[0]);
+		// 	i = 0;
+		// 	while (pipex.cmd[j][i])
+		// 	{
+		// 	// printf("valor de j: %d\n", j);
+		// 		printf("[%d][%d] %s\n", j, i, pipex.cmd[j][i]);
+		// 		i++;
+		// 	}
+		// 	j++;
+		// }
 	}
-	printf("========================================\n");
-	i = 0;
-	while(envp[i])
+	else
 	{
-		printf("envp[%i] %s\n" , i, envp[i]);
-		i++;
+		printf("numero de parametros errados\n");
 	}
-	ft_strlen("10");
+
+
+	printf("\n======================================================\n");
+	printf("fim de execucao\n");
 	return (0);
 }
+
