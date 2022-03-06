@@ -1,20 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_functions.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/05 12:11:18 by demikael          #+#    #+#             */
+/*   Updated: 2022/03/06 13:06:57 by demikael         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 int	search_index_path(t_pipex *pipex)
 {
-	// printf("estou na seach_path\n");
 	int	path_index;
 
 	path_index = 0;
 	while (pipex->envp[path_index] && \
-	!ft_strnstr(pipex->envp[path_index],"PATH", 5))
+	!ft_strnstr(pipex->envp[path_index], "PATH", 5))
 		path_index++;
 	return (path_index);
 }
 
 int	offset_first_comand(t_pipex *pipex)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (pipex->argc == 5)
@@ -22,13 +33,15 @@ int	offset_first_comand(t_pipex *pipex)
 	return (i);
 }
 
-char *make_cmd(t_pipex *pipex, int offset_cmd)
+char	*make_cmd(t_pipex *pipex, int offset_cmd)
 {
-	char **cmd;
+	char	**cmd;
+	char	*aux;
 
 	cmd = ft_split(pipex->argv[offset_cmd], ' ');
-	// printf("make_cmd : %s\n", *cmd);
-	return(*cmd);
+	aux = ft_strdup(cmd[0]);
+	free_ptr_ptr(cmd);
+	return (aux);
 }
 
 char *make_path_comand(t_pipex *pipex, char *path, int offset_cmd)
@@ -37,59 +50,52 @@ char *make_path_comand(t_pipex *pipex, char *path, int offset_cmd)
 	char	*complet_path;
 	char	*cmd;
 
-	// construir comando
-	// cmd = pipex->argv[offset_cmd]
 	cmd = make_cmd(pipex, offset_cmd);
-
 	path_front_slash = ft_strjoin(path, "/");
 	complet_path = ft_strjoin(path_front_slash, cmd);
-	// printf("completo: %s\n", complet_path);
+	free(path_front_slash);
+	free(cmd);
 	return (complet_path);
 }
 
-void valid_commands(t_pipex *pipex, int offset_comand)
+int valid_comands(t_pipex *pipex, int offset_comand)
 {
 	int		i;
 	char	**paths;
 	char	*complete_path;
 
-	// offset_comand = offset_first_comand(pipex);
 	i = search_index_path(pipex);
 	paths = ft_split(pipex->envp[i], ':');
-	// printf("[%d] - %s\n", i, pipex->envp[i]);
-	i = -1;
-	// pipex->cmd = (char ***)malloc(sizeof(char ***) * \
-	// (pipex->argc - offset_comand + 1));
-	// if(!pipex->cmd)
-	// 	return ;
-	// printf("tratar aprostofo dentro do make_cmd\n");
-	while (paths[++i])
+	while (offset_comand < pipex->argc - 1)
 	{
-		complete_path = make_path_comand(pipex, paths[i], offset_comand);
-		// printf("caminho completo: %s\n", complete_path);
-		if (access(complete_path, X_OK | F_OK) == 0)
+		i = -1;
+		while (paths[++i])
 		{
-			pipex->cmd[0] = &complete_path;
-			// complete_cmd(pipex, offset_comand);
-			// printf("offset_cmd: %d\n", offset_comand - 1);
-			pipex->cmd[offset_comand - 1] = ft_split(pipex->argv[offset_comand], ' ');
-			// printf("estou dentro do cmd: %s\n", *pipex->cmd[0]);
-			// set_comands(pipex, offset_comand);
-			break;
+			complete_path = make_path_comand(pipex, paths[i], offset_comand);
+			if (access(complete_path, X_OK | F_OK) == 0)
+			{
+				pipex->path_cmd[offset_comand - offset_first_comand(pipex)] =
+				ft_strdup(complete_path);
+				pipex->cmd[offset_comand - offset_first_comand(pipex)] =
+				ft_split(pipex->argv[offset_comand], ' ');
+				free(complete_path);
+				break;
+			}
+			else if (paths[i + 1] == 0)
+			{
+				dprintf(2, "command not found\n");
+				free_ptr_ptr(paths);
+				ft_exit(pipex);
+				free(complete_path);
+				return (1);
+			}
+			else
+				free(complete_path);
 		}
-		else
-		{
-			// printf("[%d] - invalido\n", i);
-		}
-		free(complete_path);
-		// printf("[%d] %s\n", i, paths[i]);
+		offset_comand++;
 	}
-	free(paths);
-	// i = -1;
-	// while (pipex->cmd[offset_comand - 1][++i])
-		// printf("dentro do negocio [%d][%d] %s\n", offset_comand - 1, i, pipex->cmd[offset_comand - 1][i]);
-// printf("teminei o valid_paths\n");
+	free_ptr_ptr(paths);
+	return (0);
 }
-// PATH
 
 

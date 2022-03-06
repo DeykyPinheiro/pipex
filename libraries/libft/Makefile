@@ -43,7 +43,7 @@ $(NAME): $(OBJ_DIR) $(OBJ)
 	$(AR) $(ARFLAGS) $(NAME) $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	gcc -c $< -o $@
+	$(CC) -c $< -o $@
 
 clean:
 	$(RM) $(OBJ_DIR)

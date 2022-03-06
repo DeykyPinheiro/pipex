@@ -6,7 +6,7 @@
 #    By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/14 18:00:57 by demikael          #+#    #+#              #
-#    Updated: 2022/01/17 01:35:32 by demikael         ###   ########.fr        #
+#    Updated: 2022/03/06 12:42:56 by demikael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME	=	pipex
 LIBFT_PATH = ./libraries/libft
 
 CC		=	clang
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	= -Wall -Werror -Wextra -g
 
 RM		=	rm -rf
 
@@ -54,14 +54,23 @@ re:			fclean all
 r:	all
 	clear
 	./$(NAME) input_file.txt "tr a b" "tr b c" output_file.txt
+	cat output_file.txt
 # cat input_file.txt | tr a c | tr b c | tr d c | grep 'line e'
 # ./a.out input_file.txt "tr a b" "grep 'line b'" output_file.txt
 # same cat input_file.txt | tr a b | grep 'line b'
 
-v:
-	valgrind ./$(NAME)
-t:
+# valgrind ./$(NAME)
+v:	all
+	clear
+	valgrind --leak-check=full --track-origins=yes ./pipex input_file.txt "tr a b" "tr b c"  output_file.txt
+
+t:	all
+	clear
 	$(MAKE) -C ./pipex-tester
+
+n:
+	clear
+	norminette ./src ./libraries | head -35
 
 
 test:

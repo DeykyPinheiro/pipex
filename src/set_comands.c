@@ -1,31 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_comands.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/06 13:01:14 by demikael          #+#    #+#             */
+/*   Updated: 2022/03/06 13:04:22 by demikael         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
-// void	complete_cmd(t_pipex *pipex, int offset_comand)
-// {
-	// pipex->cmd[offset_comand - 1] = ft_split(pipex->argv[offset_comand], ' ');
-	// printf("to na set comands %d\n", offset_comand - 1);
-	// int i = 0;
-	// while (pipex->cmd[offset_comand - 1][i])
-	// {
-	// 	printf("[%d][%d]: %s\n", offset_comand - 1, i, pipex->cmd[offset_comand - 1][i]);
-	// 	i++;
-	// }
-	// printf("SAi\n");
-// }
-
-void	set_comands(t_pipex *pipex)
+int	set_comands(t_pipex *pipex)
 {
 	int offset_comand;
 
 	offset_comand = offset_first_comand(pipex);
-	pipex->cmd = (char ***)malloc(sizeof(char ***) * \
-	(pipex->argc - offset_comand + 1));
-	if(!pipex->cmd)
-		return ;
-	while (offset_comand < pipex->argc - 1)
+	pipex->path_cmd = ft_calloc(sizeof(char *), pipex->argc - offset_comand);
+	if (!pipex->path_cmd)
+		return (1);
+	pipex->cmd = ft_calloc(sizeof(char **), (pipex->argc - offset_comand));
+	if (!pipex->cmd)
 	{
-		valid_commands(pipex, offset_comand);
-		offset_comand++;
+		return (1);
 	}
-	// printf("[%d] comando\n", offset_comand - 1);
+	if (valid_comands(pipex, offset_comand))
+	{
+		return (1);
+	}
+	return (0);
 }
