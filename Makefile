@@ -6,7 +6,7 @@
 #    By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/14 18:00:57 by demikael          #+#    #+#              #
-#    Updated: 2022/03/06 12:42:56 by demikael         ###   ########.fr        #
+#    Updated: 2022/03/06 13:30:09 by demikael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJ_DIR = ./obj
 SRC_DIR = ./src
 
 SRC	=	pipex.c default_functions.c parse_functions.c comands_flow.c
-SRC += validations.c handle.c set_comands.c
+SRC +=	handle.c set_comands.c
 
 OBJ	=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -70,10 +70,9 @@ t:	all
 
 n:
 	clear
-	norminette ./src ./libraries | head -35
-
+	norminette ./src ./libraries
 
 test:
 	@echo $(OBJ)
 
-.PHONY: all clean fclean re r
+.PHONY: all clean fclean re r n

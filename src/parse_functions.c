@@ -6,7 +6,7 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/05 12:11:18 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 13:06:57 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/06 13:12:18 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*make_cmd(t_pipex *pipex, int offset_cmd)
 	return (aux);
 }
 
-char *make_path_comand(t_pipex *pipex, char *path, int offset_cmd)
+char	*make_path_comand(t_pipex *pipex, char *path, int offset_cmd)
 {
 	char	*path_front_slash;
 	char	*complet_path;
@@ -58,7 +58,7 @@ char *make_path_comand(t_pipex *pipex, char *path, int offset_cmd)
 	return (complet_path);
 }
 
-int valid_comands(t_pipex *pipex, int offset_comand)
+int	valid_comands(t_pipex *pipex, int offset_comand)
 {
 	int		i;
 	char	**paths;
@@ -74,12 +74,12 @@ int valid_comands(t_pipex *pipex, int offset_comand)
 			complete_path = make_path_comand(pipex, paths[i], offset_comand);
 			if (access(complete_path, X_OK | F_OK) == 0)
 			{
-				pipex->path_cmd[offset_comand - offset_first_comand(pipex)] =
+				pipex->path_cmd[offset_comand - offset_first_comand(pipex)] = \
 				ft_strdup(complete_path);
-				pipex->cmd[offset_comand - offset_first_comand(pipex)] =
+				pipex->cmd[offset_comand - offset_first_comand(pipex)] = \
 				ft_split(pipex->argv[offset_comand], ' ');
 				free(complete_path);
-				break;
+				break ;
 			}
 			else if (paths[i + 1] == 0)
 			{
@@ -97,5 +97,3 @@ int valid_comands(t_pipex *pipex, int offset_comand)
 	free_ptr_ptr(paths);
 	return (0);
 }
-
-

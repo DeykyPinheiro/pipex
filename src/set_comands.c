@@ -6,7 +6,7 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 13:01:14 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 13:04:22 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/06 13:13:25 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	set_comands(t_pipex *pipex)
 {
-	int offset_comand;
+	int	offset_comand;
 
 	offset_comand = offset_first_comand(pipex);
 	pipex->path_cmd = ft_calloc(sizeof(char *), pipex->argc - offset_comand);
