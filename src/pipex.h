@@ -6,7 +6,7 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 12:56:12 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 12:57:57 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/06 18:29:36 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_pipex
 	char	**envp;
 	int		infile;
 	int		outfile;
+	int		i;
 	char	**path_cmd;
 	char	***cmd;
 }	t_pipex;
@@ -45,5 +46,8 @@ int		set_comands(t_pipex *pipex);
 int		exec_comands(t_pipex *pipex);
 void	free_ptr_ptr(char **ptr);
 void	ft_exit(t_pipex *pipex);
+int		message_error(t_pipex *pipex, char *complete_path \
+, char **paths, int offset);
+int		offset_first_comand(t_pipex *pipex);
 
 #endif

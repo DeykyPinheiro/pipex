@@ -6,7 +6,7 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 13:13:48 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 13:15:01 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/06 18:23:30 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,25 @@ void	ft_exit(t_pipex *pipex)
 		free(pipex->cmd[i]);
 	}
 	free(pipex->cmd);
+}
+
+int	message_error(t_pipex *pipex, char *complete_path, char **paths, int offset)
+{
+	dprintf(2, "command not found\n");
+	free_ptr_ptr(paths);
+	ft_exit(pipex);
+	free(complete_path);
+	if (offset == 3)
+		return (127);
+	return (1);
+}
+
+int	offset_first_comand(t_pipex *pipex)
+{
+	int	i;
+
+	i = 0;
+	if (pipex->argc == 5)
+		i = 2;
+	return (i);
 }
