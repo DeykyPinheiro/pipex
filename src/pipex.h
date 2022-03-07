@@ -6,7 +6,7 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 12:56:12 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 18:29:36 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/06 21:32:18 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <signal.h>
 # include <errno.h>
 # include <string.h>
-# include "../libraries/libft/src/libft.h"
+# include "../libraries/utils/src/utils.h"
 # include <stdio.h>
 
 typedef struct s_pipex

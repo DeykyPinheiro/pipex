@@ -6,14 +6,14 @@
 #    By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/14 18:00:57 by demikael          #+#    #+#              #
-#    Updated: 2022/03/06 13:30:09 by demikael         ###   ########.fr        #
+#    Updated: 2022/03/06 21:39:06 by demikael         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	pipex
 
 # PATH
-LIBFT_PATH = ./libraries/libft
+UTILS_PATH = ./libraries/utils
 
 CC		=	clang
 CFLAGS	= -Wall -Werror -Wextra -g
@@ -34,8 +34,8 @@ $(OBJ_DIR):
 	mkdir -p ./obj
 
 $(NAME):	$(OBJ_DIR) $(OBJ)
-			$(MAKE) -C $(LIBFT_PATH)
-			$(CC) $(CFLAGS) $(OBJ) $(LIBFT_PATH)/libft.a -o $(NAME)
+			$(MAKE) -C $(UTILS_PATH)
+			$(CC) $(CFLAGS) $(OBJ) $(UTILS_PATH)/utils.a -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
@@ -43,11 +43,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 clean:
 			$(RM) $(OBJ_DIR)
-			$(MAKE) -C $(LIBFT_PATH) clean
+			$(MAKE) -C $(UTILS_PATH) clean
 
 fclean:		clean
 			$(RM) $(NAME)
-			$(MAKE) -C $(LIBFT_PATH) fclean
+			$(MAKE) -C $(UTILS_PATH) fclean
 
 re:			fclean all
 
@@ -55,11 +55,8 @@ r:	all
 	clear
 	./$(NAME) input_file.txt "tr a b" "tr b c" output_file.txt
 	cat output_file.txt
-# cat input_file.txt | tr a c | tr b c | tr d c | grep 'line e'
-# ./a.out input_file.txt "tr a b" "grep 'line b'" output_file.txt
-# same cat input_file.txt | tr a b | grep 'line b'
 
-# valgrind ./$(NAME)
+
 v:	all
 	clear
 	valgrind --leak-check=full --track-origins=yes ./pipex input_file.txt "tr a b" "tr b c"  output_file.txt

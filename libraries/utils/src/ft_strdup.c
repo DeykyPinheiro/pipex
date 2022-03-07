@@ -1,38 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/14 22:26:20 by demikael          #+#    #+#             */
-/*   Updated: 2021/11/25 23:45:07 by demikael         ###   ########.fr       */
+/*   Created: 2021/08/14 22:28:21 by demikael          #+#    #+#             */
+/*   Updated: 2022/03/06 19:47:09 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "utils.h"
 
-int	ft_atoi(const char *nptr)
+char	*ft_strdup(const char *s)
 {
+	char	*result;
 	size_t	i;
-	int		number;
-	int		signal;
 
-	number = 0;
+	result = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!result)
+		return (0);
 	i = 0;
-	while ((nptr[i] >= '\t' && nptr[i] <= '\r') || nptr[i] == ' ')
-		i++;
-	signal = 1;
-	if (nptr[i] == '+' || nptr[i] == '-')
+	while (s[i])
 	{
-		if (nptr[i] == '-')
-			signal = -1;
+		result[i] = s[i];
 		i++;
 	}
-	while (ft_isdigit(nptr[i]))
-	{
-		number = (nptr[i] - 48) + (number * 10);
-		i++;
-	}
-	return (number * signal);
+	result[i] = 0;
+	return (result);
 }

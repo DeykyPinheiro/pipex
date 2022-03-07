@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/19 18:22:42 by demikael          #+#    #+#             */
-/*   Updated: 2021/08/19 18:22:43 by demikael         ###   ########.fr       */
+/*   Created: 2021/08/14 22:28:30 by demikael          #+#    #+#             */
+/*   Updated: 2022/03/06 19:46:21 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "utils.h"
 
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	t_list	*aux;
-	t_list	*new_list;
+	char	*str1;
+	size_t	size;
 
-	if (!lst)
+	if (!s1 || !s2)
 		return (NULL);
-	aux = NULL;
-	while (lst)
-	{
-		new_list = ft_lstnew(f(lst->content));
-		if (!new_list)
-		{
-			ft_lstclear(&new_list, del);
-		}
-		else
-		{
-			ft_lstadd_back(&aux, new_list);
-		}
-		lst = lst->next;
-	}
-	return (aux);
+	size = (ft_strlen(s1) + ft_strlen(s2) + 1);
+	str1 = (char *)ft_calloc(size, sizeof(char));
+	if (!str1)
+		return (0);
+	ft_strlcpy(str1, s1, (ft_strlen(s1) + 1));
+	ft_strlcat(str1, s2, size);
+	return (str1);
 }

@@ -6,7 +6,7 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 13:13:48 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 18:23:30 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/06 21:44:03 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_exit(t_pipex *pipex)
 
 int	message_error(t_pipex *pipex, char *complete_path, char **paths, int offset)
 {
-	dprintf(2, "command not found\n");
+	perror("");
 	free_ptr_ptr(paths);
 	ft_exit(pipex);
 	free(complete_path);

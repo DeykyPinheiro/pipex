@@ -6,11 +6,11 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 22:28:11 by demikael          #+#    #+#             */
-/*   Updated: 2021/08/14 22:28:12 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/06 19:46:15 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "utils.h"
 
 static size_t	ft_count_len_words(char const *str, char delimiter)
 {

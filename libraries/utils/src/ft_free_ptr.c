@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isascii.c                                       :+:      :+:    :+:   */
+/*   ft_free_ptr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/14 22:26:56 by demikael          #+#    #+#             */
-/*   Updated: 2021/08/19 18:22:04 by demikael         ###   ########.fr       */
+/*   Created: 2021/09/06 14:39:34 by demikael          #+#    #+#             */
+/*   Updated: 2022/03/06 19:47:14 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "utils.h"
 
-int	ft_isascii(int c)
+void	ft_free_ptr(char **str)
 {
-	return ((c >= 0) && (c <= 127));
+	free(*str);
+	*str = NULL;
 }
