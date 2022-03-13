@@ -6,30 +6,23 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 13:01:14 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 18:25:43 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/13 10:57:08 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	set_comands(t_pipex *pipex)
+char	**set_comands(char *comands, char *envp[])
 {
-	int	offset_comand;
-	int	n;
+	char	**cmd;
+	char	**env;
 
-	offset_comand = offset_first_comand(pipex);
-	pipex->path_cmd = ft_calloc(sizeof(char *), pipex->argc - offset_comand);
-	if (!pipex->path_cmd)
-		return (1);
-	pipex->cmd = ft_calloc(sizeof(char **), (pipex->argc - offset_comand));
-	if (!pipex->cmd)
-	{
-		return (1);
-	}
-	n = valid_comands(pipex, offset_comand);
-	if (n == 1)
-		return (1);
-	if (n == 127)
-		return (127);
-	return (0);
+	space_treat_comands(comands);
+	cmd = ft_split(comands, ' ');
+	reverse_space_treat_comands(cmd);
+	cmd = treat_comands(cmd);
+	while (ft_strncmp("PATH=", *envp, 4) && *envp++)
+		;
+	env = ft_split(*envp, ':');
+	return (cmd_valid(env, cmd));
 }

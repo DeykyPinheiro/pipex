@@ -17,8 +17,8 @@ CFLAGS	= -g -Wall -Wextra -Werror
 ARFLAGS	= rc
 
 
-SRC	=	ft_bzero.c ft_calloc.c ft_split.c ft_memset.c
-SRC	+=	ft_strdup.c ft_strjoin.c ft_strlen.c ft_strlcpy.c
+SRC	=	ft_bzero.c ft_calloc.c ft_split.c ft_memset.c ft_putstr.c
+SRC	+=	ft_strdup.c ft_strjoin.c ft_strlen.c ft_strlcpy.c ft_strncmp.c
 SRC	+=	ft_strnstr.c ft_substr.c ft_free_ptr.c ft_strlcat.c
 
 OBJ	= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

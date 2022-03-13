@@ -6,7 +6,7 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 12:53:50 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 18:28:20 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/13 11:01:49 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,27 @@
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_pipex	pipex;
-	int		n;
+	int		index;
+	char	**cmd;
 
-	ft_bzero(&pipex, sizeof(t_pipex));
-	set_default_pipe(&pipex, argc, argv, envp);
+	index = 0;
 	if (argc == 5)
 	{
-		n = set_comands(&pipex);
-		if (n == 1)
-			return (1);
-		if (n == 127)
-			return (127);
-		if (exec_comands(&pipex))
-			return (1);
+		ft_bzero(&pipex, sizeof(t_pipex));
+		set_default_pipe(&pipex, argc, argv, envp);
+		while (++index <= argc - 3)
+		{
+			cmd = set_comands(argv[index + 1], envp);
+			if (cmd)
+				run_comands(&pipex, cmd, index);
+			else
+			{
+				if (index == 2)
+					ft_exit(&pipex, cmd, index);
+			}
+		}
+		close(pipex.infile);
+		close(pipex.outfile);
 	}
 	return (0);
 }

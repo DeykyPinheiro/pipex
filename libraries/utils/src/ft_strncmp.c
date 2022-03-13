@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   default_functions.c                                :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/06 08:16:25 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/13 11:00:41 by demikael         ###   ########.fr       */
+/*   Created: 2022/03/13 10:15:33 by demikael          #+#    #+#             */
+/*   Updated: 2022/03/13 10:15:56 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "utils.h"
 
-void	set_default_pipe(t_pipex *pipex, int argc, char **argv, char **envp)
+int	ft_strncmp(const char *str1, const char *str2, size_t n)
 {
-	pipex->argc = argc;
-	pipex->argv = argv;
-	pipex->envp = envp;
-	pipex->infile = open(pipex->argv[1], O_RDONLY);
-	pipex->outfile = open(pipex->argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	if (pipex->infile == -1 || pipex->outfile == -1)
+	size_t	i;
+
+	i = 0;
+	while ((str1[i] || str2[i]) && i < n)
 	{
-		close(pipex->infile);
-		close(pipex->outfile);
-		exit (1);
+		if (str1[i] != str2[i])
+			return ((unsigned char)str1[i] - (unsigned char)str2[i]);
+		i++;
 	}
+	return (0);
 }

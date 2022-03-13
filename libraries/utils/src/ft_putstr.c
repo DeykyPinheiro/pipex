@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   default_functions.c                                :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/06 08:16:25 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/13 11:00:41 by demikael         ###   ########.fr       */
+/*   Created: 2022/03/12 13:36:36 by demikael          #+#    #+#             */
+/*   Updated: 2022/03/12 13:36:47 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "utils.h"
 
-void	set_default_pipe(t_pipex *pipex, int argc, char **argv, char **envp)
+void	ft_putstr_fd(char *s, int fd)
 {
-	pipex->argc = argc;
-	pipex->argv = argv;
-	pipex->envp = envp;
-	pipex->infile = open(pipex->argv[1], O_RDONLY);
-	pipex->outfile = open(pipex->argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	if (pipex->infile == -1 || pipex->outfile == -1)
-	{
-		close(pipex->infile);
-		close(pipex->outfile);
-		exit (1);
-	}
+	if (!s)
+		return ;
+	while (*s)
+		write(fd, s++, 1);
 }

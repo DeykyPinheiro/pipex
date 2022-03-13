@@ -6,7 +6,7 @@
 /*   By: demikael <pinheiromikael96@gmail.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/05 12:11:18 by demikael          #+#    #+#             */
-/*   Updated: 2022/03/06 18:24:52 by demikael         ###   ########.fr       */
+/*   Updated: 2022/03/13 10:53:45 by demikael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,54 +34,66 @@ char	*make_cmd(t_pipex *pipex, int offset_cmd)
 	return (aux);
 }
 
-char	*make_path_comand(t_pipex *pipex, char *path, int offset_cmd)
+char	*make_path_comand(char *path, char **cmd)
 {
 	char	*path_front_slash;
 	char	*complet_path;
-	char	*cmd;
 
-	cmd = make_cmd(pipex, offset_cmd);
 	path_front_slash = ft_strjoin(path, "/");
-	complet_path = ft_strjoin(path_front_slash, cmd);
+	complet_path = ft_strjoin(path_front_slash, cmd[0]);
 	free(path_front_slash);
-	free(cmd);
 	return (complet_path);
 }
 
-void	set_comand_valid(t_pipex *pipex, int offset_comand, char *complete_path)
+char	**cmd_valid(char **paths, char **cmd)
 {
-	pipex->path_cmd[offset_comand - offset_first_comand(pipex)] = \
-	ft_strdup(complete_path);
-	pipex->cmd[offset_comand - offset_first_comand(pipex)] = \
-	ft_split(pipex->argv[offset_comand], ' ');
-	free(complete_path);
+	char	*temp;
+	char	*temp1;
+	char	**temp_env;
+
+	temp_env = paths;
+	while (*paths)
+	{
+		temp = ft_strjoin(*paths++, "/");
+		temp1 = ft_strjoin(temp, cmd[0]);
+		if (access(temp1, F_OK) == 0)
+		{
+			free_ptr_ptr(temp_env);
+			free(temp);
+			free(cmd[0]);
+			cmd[0] = temp1;
+			return (cmd);
+		}
+		free(temp);
+		free(temp1);
+	}
+	write(2, "comand not found: ", 18);
+	write(2, cmd[0], ft_strlen(cmd[0]));
+	free_ptr_ptr(temp_env);
+	free_ptr_ptr(cmd);
+	return (NULL);
 }
 
-int	valid_comands(t_pipex *pipex, int offset)
+char	**treat_comands(char **cmd)
 {
-	int		i;
-	char	**paths;
-	char	*complete_path;
+	int	i;
+	int	j;
 
-	paths = ft_split(pipex->envp[search_index_path(pipex)], ':');
-	while (offset < pipex->argc - 1)
+	i = 0;
+	while (cmd[i])
 	{
-		i = -1;
-		while (paths[++i])
+		j = 0;
+		while (cmd[i][j])
 		{
-			complete_path = make_path_comand(pipex, paths[i], offset);
-			if (access(complete_path, X_OK | F_OK) == 0)
+			if (cmd[i][j] == 39)
 			{
-				set_comand_valid(pipex, offset, complete_path);
-				break ;
+				if (cmd[i][j + 1] == '\0')
+					break ;
+				cmd[i] = new_comand(cmd[i]);
 			}
-			else if (paths[i + 1] == 0)
-				return (message_error(pipex, complete_path, paths, offset));
-			else
-				free(complete_path);
+			j++;
 		}
-		offset++;
+		i++;
 	}
-	free_ptr_ptr(paths);
-	return (0);
+	return (cmd);
 }
